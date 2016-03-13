@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<widget xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps" id="io.cordova.myappb614ab" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" defaultlocale="en-US">
+<widget xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps" id="org.leiflarsen.tutorial.droid" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" defaultlocale="en-US">
   <name>Map Tutorial</name>
   <description>A blank project that uses Apache Cordova to help you build an app that targets multiple mobile platforms: Android, iOS, Windows, and Windows Phone.</description>
   <author href="http://cordova.io" email="dev@cordova.apache.org">Leif Larsen</author>
@@ -107,8 +107,7 @@
     <splash src="res/screens/wp8/SplashScreenImage.jpg" width="480" height="800" />
   </platform>
   <plugin name="cordova-plugin-geolocation" version="2.1.0" />
-  <vs:plugin name="plugin.google.maps">
-      <param name="API_KEY_FOR_ANDROID" value="YOUR_API_KEY_IS_HERE" />
-      <param name="API_KEY_FOR_IOS" value="YOUR_API_KEY_IS_HERE" />
-  </vs:plugin>
+  <plugin name="plugin.google.maps" version="">
+    <param name="API_KEY_FOR_ANDROID" value="AIzaSyDWKO0LM_6AEefpsXYMGt_EJbZtdud_dcU " />
+  </plugin>
 </widget>
