@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <!--
+        Customize the content security policy in the meta tag below as needed. Add 'unsafe-inline' to default-src to enable inline JavaScript.
+        For details, see http://go.microsoft.com/fwlink/?LinkID=617521
+    -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' http://* 'unsafe-inline'; media-src *;script-src 'self' http://* 'unsafe-inline' 'unsafe-eval';img-src 'self' http://* 'unsafe-inline' 'unsafe-eval';font-src 'self' http://* 'unsafe-inline' 'unsafe-eval'">
+    <title>MapExample</title>
+
+    <!-- MapExample references -->
+    <link href="css/index.css" rel="stylesheet" />
+
+    <!-- Cordova reference, this is added to your app when it's built. -->
+    <script src="cordova.js"></script>
+    <script src="scripts/platformOverrides.js"></script>
+
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC5kTgqiM0VhWabsashPRZn5Ul3jJw5nm4"></script>
+    <link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript">
+        function GoogleMap() {
+
+            this.initialize = function () {
+                getPosition();
+            }
+
+            var showMap = function (position) {
+                var mapOptions = {
+                    zoom: 10,
+                    center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                }
+
+                var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+                return map;
+            }
+
+            var getPosition = function () {
+                navigator.geolocation.watchPosition(showMap);
+            }
+        }
+    </script>
+
+    <script src="scripts/index.js"></script>
+</head>
+<body>
+    <div id="map_canvas" style="width:100%;height:100%">
+    </div>
+</body>
+</html>
