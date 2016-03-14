@@ -7,7 +7,7 @@
         Customize the content security policy in the meta tag below as needed. Add 'unsafe-inline' to default-src to enable inline JavaScript.
         For details, see http://go.microsoft.com/fwlink/?LinkID=617521
     -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' http://* 'unsafe-inline'; media-src *;script-src 'self' http://* 'unsafe-inline' 'unsafe-eval';img-src 'self' http://* 'unsafe-inline' 'unsafe-eval';font-src 'self' http://* 'unsafe-inline' 'unsafe-eval'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' http://* https://* 'unsafe-inline'; media-src *;script-src 'self' http://* https://* 'unsafe-inline' 'unsafe-eval';img-src 'self' http://* https://* 'unsafe-inline' 'unsafe-eval';font-src 'self' http://* https://* 'unsafe-inline' 'unsafe-eval'">
     <title>MapExample</title>
 
     <!-- MapExample references -->
@@ -17,11 +17,12 @@
     <script src="cordova.js"></script>
     <script src="scripts/platformOverrides.js"></script>
 
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC5kTgqiM0VhWabsashPRZn5Ul3jJw5nm4"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC5kTgqiM0VhWabsashPRZn5Ul3jJw5nm4&libraries=places"></script>
     <link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" />
 
     <script type="text/javascript">
         function GoogleMap() {
+            var map;
 
             this.initialize = function () {
                 getPosition();
@@ -29,18 +30,73 @@
 
             var showMap = function (position) {
                 var mapOptions = {
-                    zoom: 10,
+                    zoom: 13,
                     center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    mapTypeControl: false
                 }
 
-                var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+                map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
 
-                return map;
+                addMarkers();
+
+                var input = document.getElementById("pac-input");
+                var searchBox = new google.maps.places.SearchBox(input);
+                map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+
+                map.addListener('bounds_changed', function () {
+                    searchBox.setBounds(map.getBounds());
+                });
+
+                searchBox.addListener('places_changed', function () {
+                    var places = searchBox.getPlaces();
+
+                    if (places.length == 0) {
+                        return;
+                    }
+
+                    map.setCenter(places[0].geometry.location);
+                });
+            }
+
+            var addMarkers = function () {
+                var googleHqMarker = new google.maps.Marker({
+                    clickable: true,
+                    map: map,
+                    position: new google.maps.LatLng('37.4224760', '-122.0842500'),
+                    title: "Google HQ"
+                })
+                googleHqMarker.addListener('click', function () {
+                    markerClicked(googleHqMarker);
+                });
+
+                var googleMtvMarker = new google.maps.Marker({
+                    clickable: true,
+                    map: map,
+                    position: new google.maps.LatLng('37.3974740', '-122.0848690'),
+                    title: "Google MTV"
+                })
+                googleMtvMarker.addListener('click', function () {
+                    markerClicked(googleMtvMarker);
+                });
+
+                var tacobellMarker = new google.maps.Marker({
+                    clickable: true,
+                    map: map,
+                    position: new google.maps.LatLng('37.4082550', '-122.0776200'),
+                    title: "Taco Bell"
+                })
+                tacobellMarker.addListener('click', function () {
+                    markerClicked(tacobellMarker);
+                });
+            }
+
+            var markerClicked = function (title) {
+                navigator.notification.alert("You clicked the " + title.title + " marker!", function () { });
             }
 
             var getPosition = function () {
-                navigator.geolocation.watchPosition(showMap);
+                navigator.geolocation.getCurrentPosition(showMap);
             }
         }
     </script>
@@ -48,6 +104,7 @@
     <script src="scripts/index.js"></script>
 </head>
 <body>
+    <input id="pac-input" class="controls" type="text" placeholder="Search Box" />
     <div id="map_canvas" style="width:100%;height:100%">
     </div>
 </body>
